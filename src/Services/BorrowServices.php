@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Entity\Game;
 use App\Entity\History;
 use App\Entity\User;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -17,28 +18,31 @@ class BorrowServices
 
     }
 
-    public function borrow(int $id, User $user) : void
+    public function borrow(int $id, User $user, $dateStart, $dateEnd) : void
     {
+        $dateStart = new DateTime($dateStart);
+        $dateEnd = new DateTime($dateEnd);  
+
         $game = $this->em->getRepository(Game::class)->findOneBy(['id' => $id]);
+
+        if (!$game || $game->getBorrower() != null) return;
 
         $game->setBorrower($user);
 
-        $this->constructHistory($user, $game);
+        $this->constructHistory($user, $game, $dateStart, $dateEnd);
 
         $this->em->flush();
     }
 
-    public function constructHistory(User $user, Game $game) : void 
+    public function constructHistory(User $user, Game $game, $dateStart, $dateEnd) : void 
     {
-        $date = new DateTimeImmutable;
         $history = new History;
 
-        $history->setStartDate($date);
-        $history->setEndDate(new DateTimeImmutable('tomorrow')); //TODO: change this with a date in a form
+        $history->setStartDate(DateTimeImmutable::createFromMutable($dateStart)); 
+        $history->setEndDate(DateTimeImmutable::createFromMutable($dateEnd)); 
         $history->setBorrower($user);
         $history->setGame($game);
 
         $this->em->persist($history);
-        $this->em->flush();
     }
 }

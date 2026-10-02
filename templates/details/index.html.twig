@@ -3,8 +3,10 @@
 {% block title %} {{ game.name }} {% endblock %}
 
 {% block body %}
+    {% include 'banner.html.twig' %}
+    
     <div class="pt-6">
-        <img src="https://picsum.photos/{{ random(1, 500) }}/{{ random(1, 500) }}" {# src="images/ {{ game.id }}.png" #}
+        <img src="https://picsum.photos/{{ random(1, 300) }}/{{ random(1, 300) }}" {# src="images/ {{ game.id }}.png" #}
             alt="{{ game.name }} image" class="row-span-2 aspect-3/4 rounded-lg object-cover max-lg:hidden mx-auto mt-6 
             max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-8 lg:px-8" />
 
@@ -18,10 +20,17 @@
                 <p class="text-3xl tracking-tight text-gray-900 dark:text-gray-200">Réservation</p>
 
                 <form class="mt-10" method="POST" action=" {{ path('borrow', { id: game.id }) }}">
-
-                    {# add calendar from 01/09/26 to 01/07/27 #}
-
-                    <button action="submit" class="mt-10 flex w-full items-center justify-center rounded-md 
+                    <div class="items-center flex text-black dark:text-white"> {# TODO: améliorer le tailwind #}
+                        <div>
+                            <label for="date_start" class="text-black dark:text-white">Date de début</label>
+                            <input type="date" id="date_start" name="date_start" required>
+                        </div>
+                        <div>
+                            <label for="date_end" class="text-black dark:text-white">Date de fin</label>
+                            <input type="date" id="date_end" name="date_end" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md 
                         border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white 
                         hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 
                         focus:outline-hidden">Réserver</button>

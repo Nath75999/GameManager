@@ -32,5 +32,6 @@ class AdminDashBoardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Back to the website', 'fas fa-home', 'homepage');
 +       yield MenuItem::linkTo(GameCrudController::class, 'Games', 'fas fa-map-marker-alt');
         yield MenuItem::linkTo(UserCrudController::class, 'Users', 'fas fa-map-marker-alt');
+        yield MenuItem::linkTo(HistoryCrudController::class, 'History', 'fas fa-map-marker-alt');
     }
 }
